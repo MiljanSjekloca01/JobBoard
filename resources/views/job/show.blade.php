@@ -6,5 +6,10 @@
         ]">
     </x-breadcrumbs>
 
-    <x-job-card :$job/>  <!-- :$job skracena varijanta kad je atribut i ime isto -->
+    <x-job-card :$job :show="true">  <!-- :$job skracena varijanta kad je atribut i ime isto -->
+        <!-- Description -->
+        <p class="text-sm text-slate-500 mb-4">
+            {{ nl2br(e($job->description)) }}
+        </p>
+    </x-job-card>
 </x-layout>
