@@ -25,7 +25,7 @@
                 <x-radio-group name="category" :options="$category" />
             </div>
         </div>
-        <button class="w-full p-2 rounded-md bg-slate-300">Filter</button>
+        <x-button class="w-full">Filter</x-button>
         </form>
     </x-card>
     
