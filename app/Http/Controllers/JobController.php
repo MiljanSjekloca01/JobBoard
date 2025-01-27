@@ -19,7 +19,7 @@ class JobController extends Controller
         );
 
         return view('job.index', [
-            'jobs' => Job::filter($filters)->get(),
+            'jobs' => Job::with("employer")->filter($filters)->get(),
             'experience'=> Job::$experience,
             'category' => Job::$categories
         ]);
@@ -38,7 +38,17 @@ class JobController extends Controller
 
     public function show(Job $job)
     {
-        return view("job.show", compact("job"));
+        return view('job.show', [
+            'job' => $job->load(['employer.jobs' => function ($query) use($job) {
+                $query->where('id','!=',$job->id);
+            }])
+        ]);
+
+        /* With same job in employer 
+            return view("job.show", [
+                "job" => $job->load("employer.jobs")
+            ]);
+        */ 
     }
 
     public function edit(string $id)

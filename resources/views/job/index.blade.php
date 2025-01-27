@@ -28,14 +28,15 @@
         <x-button class="w-full">Filter</x-button>
         </form>
     </x-card>
-    
+
         @foreach ($jobs as $job)    
-        <x-job-card class="mb-4" :job="$job">
-            <div>
-                <x-link-button :href="route('jobs.show',$job)">
-                    Check out
-                </x-link-button>
-            </div>
-        </x-job-card>
-    @endforeach
+            <x-job-card class="mb-4" :job="$job">
+                <div>
+                    <x-link-button :href="route('jobs.show',$job)">
+                        Check out
+                    </x-link-button>
+                </div>
+            </x-job-card>
+        @endforeach
+        
 </x-layout>
