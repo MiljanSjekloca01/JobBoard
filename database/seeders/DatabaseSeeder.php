@@ -13,6 +13,11 @@ class DatabaseSeeder extends Seeder
     
     public function run(): void
     {
+        User::factory()->create([
+            "name" => "Miljan Sjekloća",
+            "email" => "miljansjekloca@gmail.com",
+        ]);
+
         $users = User::factory(100)->create();
         
         $users = User::all()->shuffle();
@@ -30,6 +35,8 @@ class DatabaseSeeder extends Seeder
                 "employer_id" => $employers->random()->id
             ]);
         }
+
+
     }
 
     /*
