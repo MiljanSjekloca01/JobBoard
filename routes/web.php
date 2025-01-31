@@ -3,11 +3,19 @@
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JobApplicationController;
+
 
 Route::get("", fn() => to_route("jobs.index"));
 
 Route::resource("jobs", JobController::class)
 ->only(["index","show"]);
+
+
+Route::middleware("auth")->group(function() {
+    Route::resource("jobs.application", JobApplicationController::class)
+    ->only(['create', 'store'])->middleware("auth");
+});
 
 Route::resource("auth", AuthController::class)
 ->only(["create","store"]);

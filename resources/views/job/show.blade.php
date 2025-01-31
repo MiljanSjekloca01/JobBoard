@@ -11,6 +11,19 @@
         <p class="text-sm text-slate-500 mb-4">
             {{ nl2br(e($job->description)) }}
         </p>
+
+        @guest
+        <x-link-button :href="route('jobs.application.create',$job)">Login to Apply</x-link-button>
+        @else    
+            @can("apply",$job)
+                <x-link-button :href="route('jobs.application.create',$job)">Apply</x-link-button>
+                @else
+                <div class="text-center text-sm font-medium text-slate-500">
+                    You already applied to this job!
+                </div>
+            @endcan
+        @endguest
+
     </x-job-card>
 
     <!-- Other Jobs -->
