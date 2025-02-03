@@ -22,7 +22,8 @@ Route::middleware("auth")->group(function() {
 });
 
 Route::resource("auth", AuthController::class)
-->only(["create","store"]);
+->only(["create","store"])->middleware("guest");
+
 Route::delete("auth",[AuthController::class, "destroy"])->name("auth.destroy");
 
 Route::get("login", fn() => to_route("auth.create"))->name("login");
