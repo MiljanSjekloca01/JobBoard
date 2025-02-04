@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Job;
 
 class MyJobController extends Controller
 {
@@ -14,7 +15,7 @@ class MyJobController extends Controller
 
     public function create()
     {
-        //
+        return view("my_job.create", ['experience'=> Job::$experience, 'category' => Job::$categories]);
     }
 
     public function store(Request $request)
