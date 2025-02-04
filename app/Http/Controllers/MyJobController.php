@@ -18,9 +18,21 @@ class MyJobController extends Controller
         return view("my_job.create", ['experience'=> Job::$experience, 'category' => Job::$categories]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request,)
     {
-        //
+        $validatedData = $request->validate([
+            "title" => "required|string|max:255",
+            "location" => "required|string|max:255",
+            "salary" => "required|numeric|min:5000",
+            "description" => "required|string",
+            "experience" => "required|in:" . implode(',', Job::$experience),
+            "category" => "required|in:" . implode(',', Job::$categories),
+        ]);
+        
+        $request->user()->employer->jobs()->create($validatedData);
+
+        return redirect()->route("my-jobs.index")
+            ->with("success", "Job created successfully");
     }
 
     public function show(string $id)

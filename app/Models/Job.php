@@ -13,7 +13,7 @@ class Job extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ["title","location","description","salary","experience","category"];
 
     //["entry","intermediate","senior"]
 
