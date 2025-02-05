@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
-class JobController extends Controller
+class JobController extends \Illuminate\Routing\Controller
 {
-    
+    use AuthorizesRequests;
+
     public function index()
     {
+        $this->authorize('viewAny',Job::class);
+
         $filters = request()->only(
             "search",
             "min_salary",
@@ -25,44 +29,16 @@ class JobController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        //
-    }
-
-
-    public function store(Request $request)
-    {
-        //
-    }
-
     public function show(Job $job)
     {
+        $this->authorize('view',$job);
+
         return view('job.show', [
             'job' => $job->load(['employer.jobs' => function ($query) use($job) {
                 $query->where('id','!=',$job->id);
             }])
         ]);
 
-        /* With same job in employer 
-            return view("job.show", [
-                "job" => $job->load("employer.jobs")
-            ]);
-        */ 
     }
 
-    public function edit(string $id)
-    {
-        //
-    }
-
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    public function destroy(string $id)
-    {
-        //
-    }
 }

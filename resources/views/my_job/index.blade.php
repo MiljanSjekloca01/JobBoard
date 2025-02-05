@@ -8,8 +8,8 @@
     @forelse ($jobs as $job)
         <x-job-card :$job>
             <div class="text xs text-slate-500">
+                @if ($job->jobApplications->isNotEmpty()) <h2 class="font-bold text-md mb-2 w-full text-right underline underline-offset-4"> Applicants &#10534 </h2> @endif
                 @forelse ($job->jobApplications as $application)
-                <h2 class="font-bold text-md mb-2 w-full text-right underline underline-offset-4"> Applicants &#10534 </h2>
                     <div class="mb-4 flex items-center justify-between">
                         <div>
                             <div>{{ $application->user->name }}</div>
@@ -20,9 +20,11 @@
                             ${{  number_format($application->expected_salary) }}
                         </div>
                     </div>
-                    <hr>
                 @empty <div>No applications Yet</div>
                 @endforelse
+                <div class="flex space-x-2 mt-2">
+                    <x-link-button href="{{ route('my-jobs.edit',$job)}}">Edit</x-link-button>
+                </div>
             </div>
         </x-job-card>
     @empty

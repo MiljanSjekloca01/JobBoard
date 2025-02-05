@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\JobRequest;
 use Illuminate\Http\Request;
 use App\Models\Job;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class MyJobController extends Controller
+class MyJobController extends \Illuminate\Routing\Controller
 {
-   
+   use AuthorizesRequests;
+
     public function index()
     {
+        $this->authorize('viewAnyEmployer',Job::class);
+
         $jobs = auth()->user()->employer->jobs()
             ->with(["employer","jobApplications","jobApplications.user"])
             ->get();
@@ -18,39 +23,36 @@ class MyJobController extends Controller
 
     public function create()
     {
+        $this->authorize('create',Job::class);
         return view("my_job.create", ['experience'=> Job::$experience, 'category' => Job::$categories]);
     }
 
-    public function store(Request $request,)
+    public function store(JobRequest $request,)
     {
-        $validatedData = $request->validate([
-            "title" => "required|string|max:255",
-            "location" => "required|string|max:255",
-            "salary" => "required|numeric|min:5000",
-            "description" => "required|string",
-            "experience" => "required|in:" . implode(',', Job::$experience),
-            "category" => "required|in:" . implode(',', Job::$categories),
-        ]);
-        
-        $request->user()->employer->jobs()->create($validatedData);
+        $this->authorize('create',Job::class);
+        $request->user()->employer->jobs()->create($request->validated());
 
         return redirect()->route("my-jobs.index")
             ->with("success", "Job created successfully");
     }
 
-    public function show(string $id)
+    public function edit(Job $myJob)
     {
-        //
+        $this->authorize('update',$myJob);
+        
+        return view("my_job.edit", [
+            'job' => $myJob,
+            'experience'=> Job::$experience,
+            'category' => Job::$categories
+        ]);
     }
 
-    public function edit(string $id)
+    public function update(JobRequest $request, Job $myJob)
     {
-        //
-    }
-
-    public function update(Request $request, string $id)
-    {
-        //
+        $myJob->update($request->validated());
+    
+        return redirect()->route('my-jobs.index')
+            ->with('success', 'Job updated successfully');
     }
 
     public function destroy(string $id)

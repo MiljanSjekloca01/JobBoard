@@ -1,4 +1,4 @@
-@props(['name', 'options', 'showAllOption' => true])
+@props(['name', 'options','value', 'showAllOption' => true])
 <div>
     @if ($showAllOption)
         <label for="{{ $name }}_all" class="mb-1 flex items-center" >
