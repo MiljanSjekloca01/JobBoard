@@ -14,9 +14,10 @@ class MyJobController extends \Illuminate\Routing\Controller
     public function index()
     {
         $this->authorize('viewAnyEmployer',Job::class);
-
+      
         $jobs = auth()->user()->employer->jobs()
             ->with(["employer","jobApplications","jobApplications.user"])
+            ->withTrashed()
             ->get();
         return view("my_job.index",["jobs" => $jobs]);
     }
@@ -55,8 +56,11 @@ class MyJobController extends \Illuminate\Routing\Controller
             ->with('success', 'Job updated successfully');
     }
 
-    public function destroy(string $id)
+    public function destroy(Job $myJob)
     {
-        //
+        $myJob->delete();
+
+        return redirect()->route('my-jobs.index')
+            ->with("success", "Job successfully deleted !");
     }
 }
